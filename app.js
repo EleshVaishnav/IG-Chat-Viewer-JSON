@@ -10,24 +10,20 @@ const themeBtn = document.getElementById("themeBtn");
 
 /* FILE LOAD */
 
-fileInput.addEventListener("change", e => {
+fileInput.onchange = e => {
   const file = e.target.files[0];
   if (!file) return;
 
   const reader = new FileReader();
   reader.onload = () => {
-    try {
-      const data = JSON.parse(reader.result);
-      messages = (data.messages || []).reverse();
-      setupParticipants();
-      mePanel.classList.remove("hidden");
-      chatBox.classList.remove("hidden");
-    } catch {
-      alert("Invalid JSON");
-    }
+    const data = JSON.parse(reader.result);
+    messages = (data.messages || []).reverse();
+    setupParticipants();
+    mePanel.classList.remove("hidden");
+    chatBox.classList.remove("hidden");
   };
   reader.readAsText(file);
-});
+};
 
 /* PARTICIPANTS */
 
@@ -36,20 +32,20 @@ function setupParticipants() {
   messages.forEach(m => m.sender_name && set.add(m.sender_name));
 
   meSelect.innerHTML = `<option value="">Select name</option>`;
-  set.forEach(name => {
-    const opt = document.createElement("option");
-    opt.value = name;
-    opt.textContent = name;
-    meSelect.appendChild(opt);
+  set.forEach(n => {
+    const o = document.createElement("option");
+    o.value = n;
+    o.textContent = n;
+    meSelect.appendChild(o);
   });
 }
 
-meSelect.addEventListener("change", e => {
+meSelect.onchange = e => {
   me = e.target.value;
-  renderChat();
-});
+  render();
+};
 
-/* THEME SWITCH */
+/* THEME */
 
 themeBtn.onclick = () => {
   theme = theme === "dark" ? "ig" : "dark";
@@ -57,58 +53,88 @@ themeBtn.onclick = () => {
   themeBtn.textContent = "Theme: " + (theme === "ig" ? "Instagram" : "Dark");
 };
 
-/* URL / REEL DETECTION */
+/* HELPERS */
 
 function getUrl(msg) {
   if (msg?.share?.link) return msg.share.link;
-  if (typeof msg.content === "string") {
+  if (msg?.content) {
     const m = msg.content.match(/https?:\/\/[^\s]+/);
     if (m) return m[0];
   }
   return null;
 }
 
+function getVoice(msg) {
+  if (msg?.audio_files?.length) return msg.audio_files[0].uri;
+  if (msg?.files) {
+    const f = msg.files.find(x => x.mime_type?.includes("audio"));
+    if (f) return f.uri;
+  }
+  return null;
+}
+
+function getCall(msg) {
+  if (!msg.content) return null;
+  const t = msg.content.toLowerCase();
+  if (t.includes("call") || t.includes("video chat")) return msg.content;
+  return null;
+}
+
 /* RENDER */
 
-function renderChat() {
+function render() {
   chatBox.innerHTML = "";
 
   messages.forEach(msg => {
     const url = getUrl(msg);
-    if (!msg.content && !url) return;
+    const voice = getVoice(msg);
+    const call = getCall(msg);
+    if (!msg.content && !url && !voice) return;
 
-    const isMe = msg.sender_name === me;
-
-    const row = document.createElement("div");
-    row.className = "row " + (isMe ? "right" : "left");
-
-    const bubble = document.createElement("div");
-    bubble.className = "bubble " + (isMe ? "me" : "other");
-
-    const sender = document.createElement("div");
-    sender.className = "sender";
-    sender.textContent = msg.sender_name;
-
-    const body = document.createElement("div");
-
-    if (url && url.includes("instagram.com")) {
-      const a = document.createElement("a");
-      a.href = url;
-      a.target = "_blank";
-      a.textContent = url;
-      body.appendChild(a);
-    } else {
-      body.textContent = msg.content || "";
+    if (call) {
+      const row = div("row center");
+      const b = div("bubble system");
+      b.innerHTML = "📞 " + call + time(msg);
+      row.appendChild(b);
+      chatBox.appendChild(row);
+      return;
     }
 
-    const time = document.createElement("div");
-    time.className = "time";
-    time.textContent = new Date(msg.timestamp_ms).toLocaleString();
+    const isMe = msg.sender_name === me;
+    const row = div("row " + (isMe ? "right" : "left"));
+    const b = div("bubble " + (isMe ? "me" : "other"));
 
-    bubble.appendChild(sender);
-    bubble.appendChild(body);
-    bubble.appendChild(time);
-    row.appendChild(bubble);
+    b.innerHTML =
+      `<div class="sender">${msg.sender_name}</div>`;
+
+    if (url && url.includes("instagram.com")) {
+      b.innerHTML += `<a href="${url}" target="_blank">${url}</a>`;
+    } else if (msg.content) {
+      b.innerHTML += `<div>${escapeHtml(msg.content)}</div>`;
+    }
+
+    if (voice) {
+      b.innerHTML += `<audio controls src="${voice}"></audio>`;
+    }
+
+    b.innerHTML += time(msg);
+
+    row.appendChild(b);
     chatBox.appendChild(row);
   });
+}
+
+function time(msg){
+  return `<div class="time">${new Date(msg.timestamp_ms).toLocaleString()}</div>`;
+}
+
+function div(c){
+  const d = document.createElement("div");
+  d.className = c;
+  return d;
+}
+
+function escapeHtml(t){
+  return t.replace(/[&<>"]/g, c =>
+    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 }
