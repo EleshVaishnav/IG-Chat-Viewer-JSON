@@ -1,33 +1,23 @@
-* {
-  box-sizing: border-box;
-  font-family: system-ui, -apple-system, sans-serif;
-}
+* { box-sizing: border-box; font-family: system-ui, sans-serif; }
+body { margin: 0; }
 
-body {
-  margin: 0;
-}
-
-.page {
-  min-height: 100vh;
-  padding: 24px;
-}
+.page { min-height: 100vh; padding: 24px; }
 
 /* THEMES */
 
 .theme-dark {
-  background: linear-gradient(135deg, #18181b, #000);
+  background: linear-gradient(135deg,#18181b,#000);
   color: white;
 }
 
 .theme-ig {
-  background: linear-gradient(135deg, #d946ef, #ec4899, #f97316);
+  background: linear-gradient(135deg,#d946ef,#ec4899,#f97316);
   color: white;
 }
 
-.container {
-  max-width: 900px;
-  margin: auto;
-}
+/* LAYOUT */
+
+.container { max-width: 900px; margin: auto; }
 
 .header {
   display: flex;
@@ -56,25 +46,17 @@ button {
 .chat {
   height: 70vh;
   overflow-y: auto;
-  border-radius: 16px;
   padding: 16px;
+  border-radius: 16px;
   background: rgba(0,0,0,0.25);
 }
 
 /* CHAT */
 
-.row {
-  display: flex;
-  margin-bottom: 10px;
-}
-
-.left {
-  justify-content: flex-start;
-}
-
-.right {
-  justify-content: flex-end;
-}
+.row { display: flex; margin-bottom: 10px; }
+.left { justify-content: flex-start; }
+.right { justify-content: flex-end; }
+.center { justify-content: center; }
 
 .bubble {
   max-width: 70%;
@@ -84,40 +66,18 @@ button {
   box-shadow: 0 6px 18px rgba(0,0,0,0.25);
 }
 
-.theme-dark .bubble.me {
-  background: #2563eb;
-}
+.theme-dark .me { background: #2563eb; }
+.theme-dark .other { background: #3f3f46; }
+.theme-dark .system { background: #eab308; color: black; }
 
-.theme-dark .bubble.other {
-  background: #3f3f46;
-}
+.theme-ig .me { background: white; color: black; }
+.theme-ig .other { background: rgba(0,0,0,0.7); }
+.theme-ig .system { background: #fde047; color: black; }
 
-.theme-ig .bubble.me {
-  background: white;
-  color: black;
-}
+.sender { font-size: 11px; opacity: .7; margin-bottom: 4px; }
+.time { font-size: 10px; opacity: .6; margin-top: 4px; }
 
-.theme-ig .bubble.other {
-  background: rgba(0,0,0,0.7);
-}
+.hidden { display: none; }
 
-.sender {
-  font-size: 11px;
-  opacity: 0.7;
-  margin-bottom: 4px;
-}
-
-.time {
-  font-size: 10px;
-  opacity: 0.6;
-  margin-top: 4px;
-}
-
-.hidden {
-  display: none;
-}
-
-a {
-  color: #60a5fa;
-  word-break: break-all;
-}
+a { color: #60a5fa; word-break: break-all; }
+audio { width: 100%; margin-top: 6px; }
