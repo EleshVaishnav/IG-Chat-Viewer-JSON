@@ -1,83 +1,63 @@
-* { box-sizing: border-box; font-family: system-ui, sans-serif; }
-body { margin: 0; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
 
-.page { min-height: 100vh; padding: 24px; }
-
-/* THEMES */
-
-.theme-dark {
-  background: linear-gradient(135deg,#18181b,#000);
+body.dark {
+  background: #0f0f12;
   color: white;
 }
 
-.theme-ig {
-  background: linear-gradient(135deg,#d946ef,#ec4899,#f97316);
+body.ig {
+  background: linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);
   color: white;
 }
 
-/* LAYOUT */
-
-.container { max-width: 900px; margin: auto; }
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-button {
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  background: rgba(255,255,255,0.2);
-  color: white;
+.topbar {
+  display:flex;
+  justify-content:space-between;
+  padding:12px 16px;
 }
 
 .panel {
-  background: rgba(255,255,255,0.08);
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 16px;
-  backdrop-filter: blur(10px);
+  padding:12px 16px;
 }
 
-.chat {
-  height: 70vh;
+#chat {
+  height: 75vh;
   overflow-y: auto;
   padding: 16px;
-  border-radius: 16px;
-  background: rgba(0,0,0,0.25);
 }
 
-/* CHAT */
+.row {
+  display:flex;
+  margin:6px 0;
+}
 
-.row { display: flex; margin-bottom: 10px; }
-.left { justify-content: flex-start; }
-.right { justify-content: flex-end; }
-.center { justify-content: center; }
+.left { justify-content:flex-start; }
+.right { justify-content:flex-end; }
+.center { justify-content:center; }
 
 .bubble {
   max-width: 70%;
-  padding: 10px 14px;
-  border-radius: 16px;
-  font-size: 14px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+  padding:10px 12px;
+  border-radius:16px;
+  font-size:14px;
 }
 
-.theme-dark .me { background: #2563eb; }
-.theme-dark .other { background: #3f3f46; }
-.theme-dark .system { background: #eab308; color: black; }
+.dark .me { background:#2563eb; }
+.dark .other { background:#333; }
 
-.theme-ig .me { background: white; color: black; }
-.theme-ig .other { background: rgba(0,0,0,0.7); }
-.theme-ig .system { background: #fde047; color: black; }
+.ig .me { background:white; color:black; }
+.ig .other { background:rgba(0,0,0,0.7); }
 
-.sender { font-size: 11px; opacity: .7; margin-bottom: 4px; }
-.time { font-size: 10px; opacity: .6; margin-top: 4px; }
+.system {
+  background:#facc15;
+  color:black;
+}
 
-.hidden { display: none; }
-
-a { color: #60a5fa; word-break: break-all; }
-audio { width: 100%; margin-top: 6px; }
+.meta {
+  font-size:10px;
+  opacity:.7;
+  margin-top:4px;
+}
